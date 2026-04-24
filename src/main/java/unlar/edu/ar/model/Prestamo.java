@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Data // Genera Getters, Setters, equals, hashCode y toString()
+@AllArgsConstructor // Genera constructor con todos los atributos
+@NoArgsConstructor  // Genera constructor vacío (importante para frameworks)
 public class Prestamo {
     private Libro libro;
     private Estudiante estudiante;
