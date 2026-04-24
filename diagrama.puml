@@ -1,0 +1,61 @@
+@startuml Biblioteca_POO
+
+' Configuración visual
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+hide circle
+
+package "unlar.edu.ar.model" {
+    class Libro {
+        - String isbn
+        - String titulo
+        - String autor
+        - int anio
+        - boolean disponible
+    }
+
+    class Estudiante {
+        - String legajo
+        - String nombre
+        - String carrera
+        - String email
+    }
+
+    class Prestamo {
+        - Libro libro
+        - Estudiante estudiante
+        - LocalDate fechaPrestamo
+        - LocalDate fechaDevolucion
+        + String toString()
+    }
+}
+
+package "unlar.edu.ar.exception" {
+    class LibroNoDisponibleException << (E,red) Exception >>
+    class EstudianteNoEncontradoException << (R,orange) Runtime >>
+    class LimitePrestamosExcedidoException << (E,red) Exception >>
+}
+
+package "unlar.edu.ar.service" {
+    class BibliotecaService {
+        - List<Libro> catalogoLibros
+        - Map<String, Estudiante> registroEstudiantes
+        - Set<Prestamo> prestamosActivos
+        + void agregarLibro(Libro)
+        + void registrarEstudiante(Estudiante)
+        + void registrarPrestamo(String, String)
+        + void registrarDevolucion(String, String, int)
+        + double calcularMulta(int, double)
+        + List<Libro> buscarLibrosPorTitulo(String)
+    }
+}
+
+' Relaciones
+Prestamo "1" --> "1" Libro : contiene
+Prestamo "1" --> "1" Estudiante : pertenece a
+BibliotecaService "1" o-- "*" Libro : gestiona
+BibliotecaService "1" o-- "*" Estudiante : registra
+BibliotecaService "1" o-- "*" Prestamo : controla
+BibliotecaService ..> exception : lanza
+
+@enduml
