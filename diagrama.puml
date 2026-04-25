@@ -12,6 +12,17 @@ package "unlar.edu.ar.model" {
         - String autor
         - int anio
         - boolean disponible
+        --
+        + String getIsbn()
+        + void setIsbn(String)
+        + String getTitulo()
+        + void setTitulo(String)
+        + String getAutor()
+        + void setAutor(String)
+        + int getAnio()
+        + void setAnio(int)
+        + boolean isDisponible()
+        + void setDisponible(boolean)
     }
 
     class Estudiante {
@@ -19,6 +30,15 @@ package "unlar.edu.ar.model" {
         - String nombre
         - String carrera
         - String email
+        --
+        + String getLegajo()
+        + void setLegajo(String)
+        + String getNombre()
+        + void setNombre(String)
+        + String getCarrera()
+        + void setCarrera(String)
+        + String getEmail()
+        + void setEmail(String)
     }
 
     class Prestamo {
@@ -26,14 +46,17 @@ package "unlar.edu.ar.model" {
         - Estudiante estudiante
         - LocalDate fechaPrestamo
         - LocalDate fechaDevolucion
+        --
+        + Libro getLibro()
+        + void setLibro(Libro)
+        + Estudiante getEstudiante()
+        + void setEstudiante(Estudiante)
+        + LocalDate getFechaPrestamo()
+        + void setFechaPrestamo(LocalDate)
+        + LocalDate getFechaDevolucion()
+        + void setFechaDevolucion(LocalDate)
         + String toString()
     }
-}
-
-package "unlar.edu.ar.exception" {
-    class LibroNoDisponibleException << (E,red) Exception >>
-    class EstudianteNoEncontradoException << (R,orange) Runtime >>
-    class LimitePrestamosExcedidoException << (E,red) Exception >>
 }
 
 package "unlar.edu.ar.service" {
@@ -41,6 +64,7 @@ package "unlar.edu.ar.service" {
         - List<Libro> catalogoLibros
         - Map<String, Estudiante> registroEstudiantes
         - Set<Prestamo> prestamosActivos
+        --
         + void agregarLibro(Libro)
         + void registrarEstudiante(Estudiante)
         + void registrarPrestamo(String, String)
@@ -56,6 +80,5 @@ Prestamo "1" --> "1" Estudiante : pertenece a
 BibliotecaService "1" o-- "*" Libro : gestiona
 BibliotecaService "1" o-- "*" Estudiante : registra
 BibliotecaService "1" o-- "*" Prestamo : controla
-BibliotecaService ..> exception : lanza
 
 @enduml

@@ -22,7 +22,7 @@ public class Prestamo {
     
     @Override
     public String toString() {
-        return String.format("Préstamo: [Libro: %s | Estudiante: %s | Desde: %s | Hasta: %s]",
+        return String.format("Préstamo: [Libro: %s | Estudiante: %s | Desde: %s | Hasta: %s] \n",
                 libro.getTitulo(), 
                 estudiante.getNombre(), 
                 fechaPrestamo, 

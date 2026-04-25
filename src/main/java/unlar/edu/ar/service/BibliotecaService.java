@@ -90,18 +90,18 @@ public class BibliotecaService {
             return 0;
         }
         
-// Caso Base 2: Máximo de 30 días según la consigna
+// Caso Base 2: Maximo de 30 días //
         if (diasRetraso > 30) {
             return calcularMulta(30, valorLibro);
         }
 
-        // Caso Recursivo: 1% del valor por el día actual + el resto de los días
+        // Caso Recursivo: 1% del valor por el día actual + el resto de los dia s
         double multaDiaActual = valorLibro * 0.01;
         return multaDiaActual + calcularMulta(diasRetraso - 1, valorLibro); // IMPORTANTE: Llamada recursiva con un día menos
     }
 
     /**
-     * Búsqueda parcial por título (case-insensitive) - PUNTO 2.4
+     * Busqueda parcial por título (case-insensitive) - PUNTO 2.4
      */
     public List<Libro> buscarLibrosPorTitulo(String query) {
         return catalogoLibros.stream()
@@ -110,7 +110,7 @@ public class BibliotecaService {
     }
 
     /**
-     * Registrar devolución y calcular multa si corresponde - PUNTO 2.4
+     * Registrar devolucion y calcular multa si corresponde - PUNTO 2.4
      */
     public void registrarDevolucion(String isbn, String legajo, int diasRetraso) {
         // Buscamos el préstamo en el HashSet --------------------------------------------------------------

@@ -1,72 +1,153 @@
 package unlar.edu.ar.ui;
 
-// IMPORTANTE: Importar nuestras clases de los otros paquetes
-import unlar.edu.ar.model.Libro;
-import unlar.edu.ar.model.Estudiante;
+import unlar.edu.ar.model.*;
 import unlar.edu.ar.service.BibliotecaService;
-import unlar.edu.ar.exception.LibroNoDisponibleException;
-import unlar.edu.ar.exception.LimitePrestamosExcedidoException;
-import unlar.edu.ar.exception.EstudianteNoEncontradoException;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) { // Método principal para ejecutar la aplicación
-        BibliotecaService service = new BibliotecaService();
+        public static Scanner teclado;
+        private static BibliotecaService service;
 
-// 1. Crear 5 libros y 3 estudiantes 
-        service.agregarLibro(new Libro("111", "Las aventuras de Sherlock Holmes", "Sir Arthur Conan Doyle", 1892, true));
-        service.agregarLibro(new Libro("222", "Las memorias de Sherlock Holmes", "Sir Arthur Conan Doyle", 1894, true));
-        service.agregarLibro(new Libro("333", "El regreso de Sherlock Holmes", "Sir Arthur Conan Doyle", 1903, true));
-        service.agregarLibro(new Libro("444", "Su última reverencia", "Sir Arthur Conan Doyle", 1917, true));
-        service.agregarLibro(new Libro("555", "El archivo de Sherlock Holmes", "Sir Arthur Conan Doyle", 1926, true));
+        public static void main(String[] args) {
 
-        service.registrarEstudiante(new Estudiante("#EISI1335", "Jeremias Ismael Nieto", "Sistemas", "jeremiasismael10@gmail.com.ar"));
-        service.registrarEstudiante(new Estudiante("#EISI1479", "Sergio Sebastian Loreiro", "Sistemas", "ana@uoc.edu"));
-        service.registrarEstudiante(new Estudiante("#EISI1560", "Francesco Stefano Pedrocca Nieto", "Sistemas", "franestefano5@gmail.com"));
+                // ¡CORRECCIÓN CRÍTICA! Inicializamos el servicio aquí
+                service = new BibliotecaService();
 
-        System.out.println("--- Inicio de Pruebas de Gestion de Biblioteca ---\n");
+                // 1. Crear 5 libros y 3 estudiantes
+                service.agregarLibro(new Libro("111", "Las aventuras de Sherlock Holmes", "Sir Arthur Conan Doyle",
+                                1892, true));
+                service.agregarLibro(new Libro("222", "Las memorias de Sherlock Holmes", "Sir Arthur Conan Doyle", 1894,
+                                true));
+                service.agregarLibro(new Libro("333", "El regreso de Sherlock Holmes", "Sir Arthur Conan Doyle", 1903,
+                                true));
+                service.agregarLibro(new Libro("444", "Su última reverencia", "Sir Arthur Conan Doyle", 1917, true));
+                service.agregarLibro(new Libro("555", "El archivo de Sherlock Holmes", "Sir Arthur Conan Doyle", 1926,
+                                true));
 
-// INICIO DE TESTS/PRUEBAS ______________________________________________________________________________________________
-        try {
-// Test 1: Prestamo exitoso 
-            System.out.println("Intentando prestamo exitoso...");
-            service.registrarPrestamo("111", "#EISI1335");
+                service.registrarEstudiante(new Estudiante("#EISI1335", "Jeremias Ismael Nieto", "Sistemas",
+                                "jeremiasismael10@gmail.com.ar"));
+                service.registrarEstudiante(new Estudiante("#EISI1479", "Sergio Sebastian Loreiro", "Sistemas",
+                                "sergioyun155@gmail.com"));
+                service.registrarEstudiante(new Estudiante("#EISI1560", "Francesco Stefano Pedrocca Nieto", "Sistemas",
+                                "franestefano5@gmail.com"));
 
-// Test 2: Captura LibroNoDisponibleException 
-            System.out.println("\nIntentando prestar el mismo libro de nuevo...");
-            service.registrarPrestamo("111", "#EISI1479"); 
-        
-        } catch (LibroNoDisponibleException | LimitePrestamosExcedidoException | EstudianteNoEncontradoException e) {
-            System.err.println("ERROR CAPTURADO: " + e.getMessage());
-        } //catch para manejar las excepciones que puedan surgir durante los préstamos
+                System.out.println("--- Inicio de Pruebas de Gestion de Biblioteca ---\n");
+// INICIO DEL MENU DE PRUEBAS
+                teclado = new Scanner(System.in);
 
-// Test 3: Calculo de multa recursiva con 15 días (Requerimiento del TP)
-        System.out.println("\n--- Prueba de Recursividad (Multas) ---");
-        double montoMulta = service.calcularMulta(15, 1000.0);
-        System.out.println("Multa por 15 dias de retraso (sobre $1000): $" + montoMulta);
-
-// Test 4: Busqueda parcial por titulo        
-        System.out.println("\n--- Prueba de Busqueda Parcial ---");
-        String busqueda = "java";
-        System.out.println("Buscando: '" + busqueda + "'");
-        service.buscarLibrosPorTitulo(busqueda).forEach(System.out::println); //forEach para imprimir cada libro encontrado que coincida con la búsqueda parcial en el título
-
-// Test 5: Devolucion con calculo de multa
-        System.out.println("\n--- Prueba de Devolucion ---");
-        // Devolvemos el libro que prestamos al inicio (ISBN 111, Legajo #EISI1335) con 5 días de retraso
-                service.registrarDevolucion("111", "#EISI1335", 5);
-
-// Test 6: Listado de prestamos por estudiante
-        System.out.println("\n--- Prueba de Listado por Estudiante ---");
-        // Prestamos otro para ver el listado
-        try {
-            service.registrarPrestamo("222", "#EISI1479");
-            System.out.println("Préstamos de Sebastian (#EISI1479):");
-            service.listarPrestamosPorEstudiante("#EISI1479").forEach(System.out::println);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
+                int opcion = 0;
+                do {
+                        System.out.println("\n--- SISTEMA DE GESTIÓN BIBLIOTECARIA ---");
+                        System.out.println("1. Registrar Préstamo");
+                        System.out.println("2. Registrar Devolucion");
+                        System.out.println("3. Buscar Libro");
+                        System.out.println("4. Listar Prestamos");
+                        System.out.println("5. Calcular Multa por Retraso");
+                        System.out.println("6. Salir");
+                        System.out.print("Seleccione una opción: ");
+                        opcion = teclado.nextInt();
+                        teclado.nextLine(); // Limpia el "Enter"
+                        
+                        switch (opcion) {
+                                case 1:
+                                        ejecutarRegistrarPrestamo();
+                                        break;
+                                case 2:
+                                        ejecutarRegistroDevolucion();
+                                        break;
+                                case 3:
+                                        ejecutarBuscarLibro();
+                                        break;
+                                case 4:
+                                        listarPrestamos();
+                                        break;
+                                case 5:
+                                        ejecutarCalcularMulta();
+                                        break;
+                                case 6:
+                                        System.out.println("Saliendo del sistema...");
+                                        break;
+                                default:
+                                        System.out.println("Opción no válida.");
+                        }
+                } while (opcion != 6);
         }
 
-         System.out.println("\n--- Fin de Pruebas ---");
-    }  
-// FIN DE TESTS/PRUEBAS ______________________________________________________________________________________________
+        private static void ejecutarRegistrarPrestamo() {
+                System.out.print("Digite el ISBN: ");
+                String isbn = teclado.nextLine();
+                System.out.print("Digite el legajo: ");
+                String legajo = teclado.nextLine();
+
+                try {
+                        service.registrarPrestamo(isbn, legajo);
+                        System.out.println("Prestamo exitoso");
+                } catch (Exception e) {
+                        System.out.println("Mensaje de Error: " + e.getMessage());
+                }
+        }
+
+        private static void ejecutarRegistroDevolucion() {
+                System.out.print("Digite el ISBN: ");
+                String isbn = teclado.nextLine();
+                System.out.print("Digite el legajo: ");
+                String legajo = teclado.nextLine();
+                System.out.print("Digite los dias de retraso: ");
+                int diasRetraso = teclado.nextInt();
+                teclado.nextLine(); // Limpiamos buffer
+
+                try {
+                        service.registrarDevolucion(isbn, legajo, diasRetraso);
+                } catch (Exception e) {
+                        System.out.println("Error: " + e.getMessage());
+                }
+        }
+
+        private static void ejecutarBuscarLibro() {
+                System.out.print("Nombre del libro a buscar o parte del nombre: ");
+                String libro = teclado.nextLine();
+
+                List<Libro> encontrados = service.buscarLibrosPorTitulo(libro);
+                if (encontrados.isEmpty()) {
+                        System.out.println("Libro no encontrado");
+                } else {
+                        for (Libro lib : encontrados) {
+                                System.out.println(lib.toString());
+                        }
+                }
+        }
+        
+        private static void listarPrestamos() {
+                System.out.print("Listar prestamos del legajo: ");
+                String legajo = teclado.nextLine();
+
+                try {
+                        List<Prestamo> prestamos = service.listarPrestamosPorEstudiante(legajo);
+                        if (prestamos.isEmpty()) {
+                                System.out.println("El estudiante no tiene prestamos activos.");
+                        } else {
+                                System.out.println(prestamos);
+                        }
+                } catch (Exception e) {
+                        System.out.println("Error: " + e.getMessage());
+                }
+        }
+
+        private static void ejecutarCalcularMulta() {
+                System.out.print("Digite dias de retraso: ");
+                int diasRetraso = teclado.nextInt();
+                teclado.nextLine(); // Limpiamos buffer
+
+                System.out.print("Digite valor del libro: ");
+                double valorLibro = teclado.nextDouble();
+                teclado.nextLine(); // <-- ¡CORRECCIÓN! Limpiamos el buffer del double
+
+                try {
+                        // Guardamos el resultado en una variable para no llamar al método dos veces
+                        double totalMulta = service.calcularMulta(diasRetraso, valorLibro);
+                        System.out.println("Multa a pagar: $" + totalMulta);
+                } catch (Exception e) {
+                        System.out.println("Error: " + e.getMessage());
+                }
+        }
 }
